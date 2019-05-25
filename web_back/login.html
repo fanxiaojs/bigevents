@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/iconfont.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -28,14 +29,34 @@
                 <input type="submit" class="input_sub" value="登 录">
             </form>
         </div>
-
     </div>
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">提示框!!!</h4>
+                </div>
+                <div class="modal-body my-modal-body">
+                 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
 
 <script src="./js/jquery-1.12.4.min.js"></script>
+<script src="./js/bootstrap/js/bootstrap.min.js"></script>
 <script>
     $(function () {
         $('.input_sub').click(function (e) {
@@ -44,7 +65,9 @@
             var username = $('.input_txt').val().trim()
             var password = $('.input_pass').val().trim()
             if (username == '' || password == '') {
-                alert('傻逼,帐号密码都没写就想登陆?')
+                // alert('傻逼,帐号密码都没写就想登陆?')
+                $('.my-modal-body').text('傻逼,帐号密码都没写就想登陆?')
+                $('#myModal').modal()
                 return
             }
             $.ajax({
@@ -57,9 +80,11 @@
                 success: function (backData) {
                     // console.log(backData);
                     if (backData.code == 400) {
-                        alert('重写一遍,写错啦~')
+                        // alert('重写一遍,写错啦~')
+                        $('.my-modal-body').text('重写一遍,写错啦~')
+                        $('#myModal').modal()
                     } else if (backData.code == 200) {
-                        window.location.href='./index.html'
+                        window.location.href = './index.html'
                     }
                 }
             })
