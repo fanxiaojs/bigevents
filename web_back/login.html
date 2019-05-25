@@ -29,8 +29,40 @@
             </form>
         </div>
 
-    </div> 
+    </div>
 
 </body>
 
 </html>
+
+<script src="./js/jquery-1.12.4.min.js"></script>
+<script>
+    $(function () {
+        $('.input_sub').click(function (e) {
+            //阻止默认行为
+            e.preventDefault()
+            var username = $('.input_txt').val().trim()
+            var password = $('.input_pass').val().trim()
+            if (username == '' || password == '') {
+                alert('傻逼,帐号密码都没写就想登陆?')
+                return
+            }
+            $.ajax({
+                url: ' https://autumnfish.cn/big/admin/login',
+                type: 'post',
+                data: {
+                    user_name: username,
+                    password: password
+                },
+                success: function (backData) {
+                    // console.log(backData);
+                    if (backData.code == 400) {
+                        alert('重写一遍,写错啦~')
+                    } else if (backData.code == 200) {
+                        window.location.href='./index.html'
+                    }
+                }
+            })
+        })
+    })
+</script>
