@@ -79,6 +79,11 @@
                     $('.user_pic').attr('src', backData.data.user_pic)
                 }
             })
+            $('#exampleInputFile').change(function(){
+                var ico = this.files[0]
+                var url = URL.createObjectURL(ico)
+                $(this).prev().attr('src',url)
+            })  
         })
     </script>
 </body>
