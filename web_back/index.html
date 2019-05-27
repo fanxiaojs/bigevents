@@ -138,7 +138,7 @@
                 url: ' https://autumnfish.cn/big/admin/logout',
                 type: 'post',
                 success: function (backData) {
-                    // console.log(backData);
+                    console.log(backData);
                     if (backData.code == 200) {
                         window.location.href = './login.html'
                     }
@@ -149,7 +149,7 @@
             url: 'https://autumnfish.cn/big32/admin/getuser',
             type: 'get',
             success: function (backData) {
-                // console.log(backData);
+                console.log(backData);
                 if (backData.code == 200) {
                     $('.user_info img').attr('src', backData.data.user_pic)
                     $('.user_info i').text(backData.data.nickname)
