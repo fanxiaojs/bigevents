@@ -114,7 +114,7 @@
                         <td>{{$value.slug}}</td>
                         <td class="text-center">
                             <a href='javascript:editTr({"id":"1","slug":"uncategorized","name":"未分类"});' class="btn btn-info btn-xs">编辑</a>
-                            <a href="javascript:deleteTr( 1 );" class="btn btn-danger btn-xs">删除</a>
+                            <a href="javascript:deleteTr( {{$value.id}} );" class="btn btn-danger btn-xs">删除</a>
                         </td>
                     </tr>
             {{/each}}
@@ -140,30 +140,26 @@
 
 
         /*获取文章类别数据*/
+        function getbooks() {
+            $.ajax({
+                url: 'https://autumnfish.cn/big32/admin/category_search',
+                type: 'get',
+                success: function (backData) {
+                    console.log(backData);
+                    var html = template('cate', backData)
+                    $('tbody').html(html)
+                }
+            })
+        }
         $(function () {
-            function getbooks() {
-                $.ajax({
-                    url: 'https://autumnfish.cn/big32/admin/category_search',
-                    type: 'get',
-                    success: function (backData) {
-                        console.log(backData);
-                        var html = template('cate', backData)
-                        $('tbody').html(html)
-                    }
-                })
-            }
-
             getbooks()
-
-
-
             $('.addbooks').click(function () {
                 var name = $('.form_name').val()
                 var slug = $('.form_slug').val()
-                console.log(name);
+                // console.log(name);
 
                 $.ajax({
-                    url: 'https://autumnfish.cn/big32/admin/category_add',
+                    url: 'https://autumnfish.cn/big/admin/category_add',
                     type: 'post',
                     data: {
                         name: name,
@@ -179,6 +175,23 @@
                 })
             })
         })
+        //删除文章类别数据
+        function deleteTr(id) {
+            $.ajax({
+                url: 'https://autumnfish.cn/big/admin/category_delete',
+                type: 'post',
+                data: {
+                    id: id
+                },
+                success: function (backData) {
+                    console.log(backData);
+                    getbooks();
+                    console.log(5555);
+
+                }
+            })
+        }
+
 
 
     </script>
