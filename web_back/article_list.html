@@ -270,6 +270,21 @@
         <option>{{v.name }}</option>
         {{/each}}
     </script>
+    <script type="text/html" id="cates">
+        {{each data v}}
+        <tr>
+                <td>{{v.title}}</td>
+                <td>{{v.author}}</td>
+                <td>{{v.type}}</td>
+                <td class="text-center">{{v.date}} </td>
+                <td class="text-center">{{v.state}} </td>
+                <td class="text-center">
+                    <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+                    <a href="javascript:deleteTr( 1005 );" class="btn btn-danger btn-xs">删除</a>
+                </td>
+            </tr>
+        {{/each}}
+    </script>
     <script>
         // 设置左侧菜单
         $('#release_btn').click(function () {
@@ -283,8 +298,21 @@
             type: 'get',
             success: function (backData) {
                 // console.log(backData);
-                var html = template('cate',backData)
+                var html = template('cate', backData)
                 $('#selCategory').append(html)
+            }
+        })
+        //获取文章分页数据
+        $.ajax({
+            url: 'http://localhost:8000/admin/search',
+            data: {
+                page: 1,
+                perpage: 6
+            },
+            success: function (backData) {
+                // console.log(backData);
+                var html = template('cates',backData)
+                $('tbody').html(html)
             }
         })
     </script>
