@@ -72,7 +72,8 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-center">
-                            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addModal">新增分类</a>
+                            <a href="#" class="btn btn-success btn-add" data-toggle="modal"
+                                data-target="#addModal">新增分类</a>
                         </td>
                     </tr>
                 </tfoot>
@@ -89,13 +90,15 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <!-- 隐藏域 -->
+                        <input type="hidden" name="id">
                         <div class="form-group">
                             <label for="recipient-name" class="control-label ">分类名称:</label>
-                            <input type="text" class="form-control form_name" id="recipient-name">
+                            <input type="text" class="form-control form_name" id="recipient-name" name='name'>
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="control-label ">分类别名:</label>
-                            <input type="text" class="form-control form_slug" id="recipient-name">
+                            <input type="text" class="form-control form_slug" id="recipient-name" name='slug'>
                         </div>
                     </form>
                 </div>
@@ -113,7 +116,7 @@
                         <td>{{$value.name}}</td>
                         <td>{{$value.slug}}</td>
                         <td class="text-center">
-                            <a href='javascript:editTr({"id":"1","slug":"uncategorized","name":"未分类"});' class="btn btn-info btn-xs">编辑</a>
+                            <a href='javascript:editTr({"id":"{{$value.id}} ","slug":"{{$value.slug}}","name":"{{$value.name}}"});' class="btn btn-info btn-xs">编辑</a>
                             <a href="javascript:deleteTr( {{$value.id}} );" class="btn btn-danger btn-xs">删除</a>
                         </td>
                     </tr>
@@ -126,7 +129,7 @@
         });
 
 
-        $('#model_add').click(function () {
+        $('#model_shutoff').click(function () {
 
             $('#addModal').modal('hide');
         });
@@ -142,7 +145,7 @@
         /*获取文章类别数据*/
         function getbooks() {
             $.ajax({
-                url: 'https://autumnfish.cn/big32/admin/category_search',
+                url: 'http://localhost:8000/admin/category_search',
                 type: 'get',
                 success: function (backData) {
                     console.log(backData);
@@ -151,6 +154,49 @@
                 }
             })
         }
+
+        $('#model_add').click(function () {
+            //隐藏模态框
+            $('#addModal').modal('hide');
+            if ($(this).hasClass('btn-success')) {
+                var id = $('input[name=id]').val()
+                var name = $('input[name=name]').val()
+                var slug = $('input[name=slug]').val()
+                $.ajax({
+                    url: 'http://localhost:8000/admin/category_edit',
+                    type: 'post',
+                    // data: {
+                    //     id: id,
+                    //     name: name,
+                    //     slug: slug
+                    // },
+                    data:$('form').serialize(),
+                    success: function (backData) {
+                        // console.log(backData);
+                        getbooks()
+                    }
+                })
+            } else {
+                //新增
+                var name = $('.form_name').val()
+                var slug = $('.form_slug').val()
+                $.ajax({
+                    url: 'http://localhost:8000/admin/category_add',
+                    type: 'post',
+                    data: {
+                        name: name,
+                        slug: slug
+                    },
+                    success: function (backData) {
+
+                        if (backData.code == 200) {
+                            getbooks();
+
+                        }
+                    }
+                })
+            }
+        });
         $(function () {
             getbooks()
             $('.addbooks').click(function () {
@@ -159,7 +205,7 @@
                 // console.log(name);
 
                 $.ajax({
-                    url: 'https://autumnfish.cn/big/admin/category_add',
+                    url: 'http://localhost:8000/admin/category_add',
                     type: 'post',
                     data: {
                         name: name,
@@ -174,23 +220,37 @@
                     }
                 })
             })
+            window.editTr = function (data) {
+                for (const key in data) {
+                    $('input[name=' + key + ']').val(data[key])
+                }
+                //改弹窗内容
+                $('.modal-title').text('请编辑')
+                $('#model_add').text('保存').addClass('btn-success')
+            }
         })
+        $('.btn-add').click(function () {
+            $('.modal-title').text('新增文章')
+            $('#model_add').text('新增').removeClass('btn-success')
+        })
+
         //删除文章类别数据
         function deleteTr(id) {
             $.ajax({
-                url: 'https://autumnfish.cn/big/admin/category_delete',
+                url: 'http://localhost:8000/admin/category_delete',
                 type: 'post',
                 data: {
                     id: id
                 },
                 success: function (backData) {
-                    console.log(backData);
+                    // console.log(backData);
                     getbooks();
-                    console.log(5555);
+                    // console.log(5555);
 
                 }
             })
         }
+
 
 
 
