@@ -263,6 +263,7 @@
 
         </div>
     </div>
+    <script src="./js/jquery.twbsPagination.min.js"></script>
     <script src="./js/template-web.js"></script>
     <!-- 设置模板引擎 -->
     <script type="text/html" id="cate">
@@ -302,19 +303,36 @@
                 $('#selCategory').append(html)
             }
         })
+        getwz()
+        var ym = 1;
         //获取文章分页数据
-        $.ajax({
-            url: 'http://localhost:8000/admin/search',
-            data: {
-                page: 1,
-                perpage: 6
-            },
-            success: function (backData) {
-                // console.log(backData);
-                var html = template('cates',backData)
-                $('tbody').html(html)
+        function getwz() {
+            $.ajax({
+                url: 'http://localhost:8000/admin/search',
+                data: {
+                    page: ym,
+                    perpage: 6
+                },
+                success: function (backData) {
+                    // console.log(backData);
+                    var html = template('cates', backData)
+                    $('tbody').html(html)
+                }
+            })
+        }
+        //设置分页插件
+        $('.pagination').twbsPagination({
+            totalPages: 35,
+            visiblePages: 7,
+            first: '首页',
+            last: '尾页',
+            prev: '上一页',
+            next: '下一页',
+            onPageClick: function (event, page) {
+                ym = page;
+                getwz()
             }
-        })
+        });
     </script>
 
 </body>
